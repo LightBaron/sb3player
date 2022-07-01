@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="/path/to/forkphorus/phosphorus.css">
+    <style>
+      #player {
+        width: 480px;
+        height: 392px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="player"></div>
+
+    <script src="/path/to/forkphorus/lib/scratch-sb1-converter.js"></script> <!-- Needed for Scratch 1 projects -->
+    <script src="/path/to/forkphorus/lib/jszip.min.js"></script>
+    <script src="/path/to/forkphorus/lib/fontfaceobserver.standalone.js"></script>
+    <script src="/path/to/forkphorus/lib/canvg.min.js"></script> <!-- Needed for Scratch 2 projects-->
+    <script src="/path/to/forkphorus/lib/purify.min.js"></script>
+    <script src="/path/to/forkphorus/phosphorus.dist.js"></script>
+
+    <script>
+      P.io.config.localPath = '/path/to/forkphorus/'; // needs a / at the end
+
+      var playerElement = document.getElementById('player');
+      var player = new P.player.Player();
+      playerElement.appendChild(player.root);
+
+      player.addControls();
+
+      new P.player.ProgressBar(player);
+
+      var projectURL = "https://packager.turbowarp.org/example.sb3"; // URL to FULL sb, sb2, sb3
+      var projectType = "sb3"; // the file extension of the project
+      fetch(projectURL)
+        .then((r) => r.arrayBuffer())
+        .then((buffer) => player.loadProjectFromBuffer(buffer, projectType));
+    </script>
+  </body>
+</html>
