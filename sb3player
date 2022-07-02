@@ -1,6 +1,47 @@
-<iframe src="https://rrf.vfu.mybluehost.me/sb3player.html?projectURL=@@VIDEOURL@@" width="482" height="393" style="border:none;" scrolling="no"></iframe>
-</br></br>
-<!-- <button type="button" href="@@VIDEOURL@@">Download Project</button>-->
-<form method="get" action="@@VIDEOURL@@">
-   <button type="submit">Scarica Progetto</button>
-</form>
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="forkphorus/phosphorus.css">
+    <style>
+      #player {
+        width: 480px;
+        height: 392px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="player"></div>
+
+    <script src="forkphorus/lib/scratch-sb1-converter.js"></script> <!-- Needed for Scratch 1 projects -->
+    <script src="forkphorus/lib/jszip.min.js"></script>
+    <script src="forkphorus/lib/fontfaceobserver.standalone.js"></script>
+    <script src="forkphorus/lib/canvg.min.js"></script> <!-- Needed for Scratch 2 projects-->
+    <script src="forkphorus/lib/purify.min.js"></script>
+    <script src="forkphorus/phosphorus.dist.js"></script>
+
+    <script>
+      // SF new: get project URL from iframe url parameters
+      const queryString = window.location.search;
+	  const urlParams = new URLSearchParams(queryString);
+	  const projectURL = urlParams.get('projectURL')
+
+      P.io.config.localPath = 'forkphorus/'; // needs a / at the end
+
+      var playerElement = document.getElementById('player');
+      var player = new P.player.Player();
+      playerElement.appendChild(player.root);
+
+      player.addControls();
+	  // SF: new: added to remove autoplay
+	  player.setOptions({ autoplayPolicy: 'never' });
+	  
+      new P.player.ProgressBar(player);
+
+      // var projectURL = "Windows NT screensaver.sb3"; // URL to FULL sb, sb2, sb3
+      var projectType = "sb3"; // the file extension of the project
+      fetch(projectURL)
+        .then((r) => r.arrayBuffer())
+        .then((buffer) => player.loadProjectFromBuffer(buffer, projectType));
+    </script>
+  </body>
+</html>
